@@ -36,3 +36,38 @@
                 <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
             </div>
         </header>
+
+        <section style="margin-top:14px;">
+            <div class="input-group">
+                <input type="text" id="new-task" placeholder="Escribir una nueva nota...">
+                <button class="btn-add" onclick="addTask()">Agregar</button>
+            </div>
+        </section>
+
+        <main class="board" aria-label="Tablero de tareas">
+            <div class="column">
+                <h3>Pendientes <span class="col-badge">Nuevo</span></h3>
+                <div class="task-list" id="list-pendientes"></div>
+            </div>
+
+            <div class="column">
+                <h3>En Proceso</h3>
+                <div class="task-list" id="list-enproceso"></div>
+            </div>
+
+            <div class="column">
+                <h3>En Revisión</h3>
+                <div class="task-list" id="list-enrevision"></div>
+            </div>
+
+            <div class="column">
+                <h3>Hecho</h3>
+                <div class="task-list" id="list-hecho"></div>
+            </div>
+        </main>
+
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
