@@ -1,18 +1,40 @@
 /* ==========================================
    ESTILOS GENERALES
    ========================================== */
+:root{
+    /* Paleta neutra y legible: grises suaves y acentos desaturados */
+    --bg: #f4f6f7; /* fondo página */
+    --panel: #eef2f4; /* superficie de los paneles */
+    --surface: #f6f7f8; /* superficie clara usada en cards */
+    --muted: #6b7280; /* texto secundario */
+    --text: #0b1220; /* texto principal (oscuro para máxima legibilidad) */
+    --accent: #65758a; /* acento desaturado (gris-azulado) */
+    --accent-2: #8b8576; /* acento secundario neutro cálido */
+    --accent-3: #5b6b64; /* acento terciario gris verdoso */
+    --card-bg: #f6f7f9; /* tarjetas suaves (no blanco puro) */
+    --glass-border: rgba(20,30,50,0.035);
+    --shadow-soft: 0 10px 30px rgba(11,18,28,0.04);
+    --shadow-subtle: 0 6px 18px rgba(11,18,28,0.03);
+    --radius: 12px;
+}
+
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5; /* Color suave para evitar fatiga visual */
+    font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    background: var(--bg);
     display: flex;
     justify-content: center;
-    padding: 20px;
+    padding: 28px 22px;
     margin: 0;
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    color: var(--text);
+    line-height: 1.38;
+    -webkit-font-feature-settings: 'ss01' on;
 }
 
 .container {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1150px;
     background-color: transparent;
 }
 
@@ -25,78 +47,138 @@ body {
    ESTILOS DEL LOGIN
    ========================================== */
 #login-screen {
-    background: white;
-    max-width: 400px;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    margin-top: 50px;
+    background: linear-gradient(180deg, var(--card-bg), #fbfdfe);
+    max-width: 460px;
+    padding: 34px 34px 28px 34px;
+    border-radius: calc(var(--radius) + 2px);
+    box-shadow: var(--shadow-soft);
+    margin-top: 46px;
     text-align: center;
+    border: 1px solid var(--glass-border);
 }
 
 .error {
-    color: #d9534f;
+    color: #bf2e2e;
     font-size: 0.9em;
-    margin-top: 15px;
-    font-weight: bold;
+    margin-top: 12px;
+    font-weight: 600;
 }
 
 .privacy-check {
-    margin: 15px 0;
-    font-size: 0.85em;
+    margin: 12px 0 16px 0;
+    font-size: 0.88em;
     text-align: left;
+    color: var(--muted);
 }
 
 /* Inputs generales */
 input[type="text"], input[type="password"] {
-    width: 90%;
-    padding: 10px;
+    width: 100%;
+    padding: 12px 14px;
     margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    border: 1px solid rgba(11,18,28,0.04);
+    border-radius: calc(var(--radius) - 4px);
+    background: #f7f8f9;
+    box-shadow: var(--shadow-subtle) inset;
+    font-size: 14px;
+    color: var(--text);
 }
+
+.login-form input::placeholder { color: #9aa4b2; opacity:0.9 }
+
+input:focus { outline: none; box-shadow: 0 8px 28px rgba(101,117,138,0.08); border-color: rgba(101,117,138,0.16); }
+
+/* Accessible focus for interactive elements */
+button:focus, .btn-add:focus, .logout-btn:focus, .task-card:focus { outline: 3px solid rgba(101,117,138,0.14); outline-offset: 2px; }
+
+/* Drag over highlight */
+.task-list.drag-over { background: rgba(101,117,138,0.03); border-radius:10px; }
+
+/* Small icon styles */
+svg { color: inherit; }
 
 /* ==========================================
    ESTILOS DEL TABLERO (BOARD)
    ========================================== */
 .board {
-    display: flex; /* Flexbox para poner columnas lado a lado */
-    gap: 20px;
+    display: flex;
+    gap: 18px;
     justify-content: space-between;
-    margin-top: 20px;
+    margin-top: 18px;
+    align-items: flex-start;
+    align-content: flex-start;
 }
 
 /* Estilo de las columnas */
 .column {
-    background: #ebecf0;
-    padding: 15px;
-    border-radius: 8px;
-    width: 32%; /* Divide el ancho en 3 partes iguales */
-    min-height: 400px;
+    background: var(--panel);
+    padding: 12px;
+    border-radius: var(--radius);
+    width: 32%;
+    min-height: 160px; /* permite crecer según contenido */
+    border: 1px solid var(--glass-border);
+    position: relative;
+    display:flex; flex-direction:column;
 }
 
+.task-list { display:flex; flex-direction:column; gap:10px; padding:8px; }
+
+.column h3{
+    margin:0 0 10px 0; padding:8px 10px; border-radius: calc(var(--radius) - 6px); font-size:15px; display:flex; align-items:center; justify-content:space-between; gap:8px;
+    color:var(--text);
+}
+
+.col-badge{ background: rgba(15,23,36,0.06); color:var(--muted); padding:4px 8px; border-radius:999px; font-size:12px }
+
 /* Tarjetas individuales de tareas */
+
 .task-card {
-    background: white;
-    padding: 15px;
+    background: linear-gradient(180deg, var(--card-bg), #fbfdfe);
+    padding: 12px 12px;
     margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    border-radius: calc(var(--radius) - 2px);
+    box-shadow: var(--shadow-subtle);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
+    border-left: 5px solid rgba(11,18,28,0.04);
+    transition: transform 160ms ease, box-shadow 160ms ease;
 }
+
+.task-card:hover { transform: translateY(-4px); box-shadow: 0 18px 40px rgba(11,18,28,0.06); }
+
+.task-title { font-weight: 700; color: var(--text); font-size:15px; display:inline-block; background: rgba(11,18,28,0.03); padding:6px 10px; border-radius:8px; }
+.task-meta { font-size: 12px; color: var(--muted); }
+
+.task-card[data-col="todo"]{ border-left-color: rgba(101,117,138,0.14); }
+.task-card[data-col="doing"]{ border-left-color: rgba(139,130,115,0.12); }
+.task-card[data-col="done"]{ border-left-color: rgba(91,107,100,0.12); }
+
+.chip { display:inline-block; padding:6px 8px; border-radius:999px; font-size:12px; color:var(--muted); background: rgba(15,23,36,0.04); }
 
 /* Botones de acción */
 button {
     cursor: pointer;
-    padding: 8px 15px;
+    padding: 10px 14px;
     border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    transition: background 0.3s;
+    border-radius: 8px;
+    font-weight: 700;
+    transition: background 180ms ease, transform 120ms ease, box-shadow 160ms ease;
 }
 
-.btn-primary { background-color: #007bff; color: white; width: 100%; }
-.btn-add { background-color: #28a745; color: white; }
-.logout-btn { background-color: #dc3545; color: white; float: right; }
+.btn-primary { background: linear-gradient(180deg, #495463 0%, #39434f 100%); color: white; width: 100%; box-shadow: 0 8px 20px rgba(11,18,28,0.06); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 36px rgba(11,18,28,0.08); }
+.btn-add { background: linear-gradient(180deg, #66756a 0%, #56655b 100%); color: white; box-shadow: 0 6px 18px rgba(11,18,28,0.04); }
+.btn-add:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(11,18,28,0.06); }
+.logout-btn { background: linear-gradient(180deg,#9a6b6b 0%, #8b5a5a 100%); color: white; padding: 8px 12px; border-radius: 8px; box-shadow: 0 6px 18px rgba(11,18,28,0.04); }
+.logout-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(11,18,28,0.06); }
+
+.header-bar { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.header-bar h1 { margin:0; font-size:20px; color:#0f172a; }
+.input-group { display:flex; gap:10px; margin-top:12px; }
+.input-group input { flex:1; }
+
+@media (max-width:900px){
+    .board { flex-direction:column; }
+    .column { width:100%; }
+}
