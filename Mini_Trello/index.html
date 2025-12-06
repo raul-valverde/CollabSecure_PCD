@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Trello - Proyecto Colaborativo</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="login-screen" class="container">
+        <h2> Acceso Seguro al Sistema</h2>
+        <p class="subtitle">Ingrese sus credenciales para gestionar el tablero.</p>
+        
+        <div class="login-form">
+            <input type="text" id="username" placeholder="Usuario (admin)">
+            <input type="password" id="password" placeholder="Contraseña (1234)">
+            
+            <div class="privacy-check">
+                <input type="checkbox" id="privacy-policy">
+                <label for="privacy-policy">
+                    He leído y acepto la <a href="#" onclick="alert('Política: Sus datos se guardan localmente y no se comparten con terceros.')">Política de Privacidad</a> y uso ético de datos.
+                </label>
+            </div>
+
+            <button onclick="login()" class="btn-primary">Ingresar</button>
+            
+            <p id="error-msg" class="error"></p>
+        </div>
+    </div>
+
+    <div id="app-screen" class="container hidden">
+        <header>
+            <h1> Tablero de Equipo</h1>
+            <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
+        </header>
+
+        <div class="input-group">
+            <input type="text" id="new-task" placeholder="Ej: Redactar informe final...">
+            <button onclick="addTask()" class="btn-add">Agregar Tarea (+)</button>
+        </div>
+
+        <div class="board">
+            <div class="column" id="col-todo">
+                <h3>🔴 Por Hacer</h3>
+                <div id="list-todo" class="task-list">
+                    </div>
+            </div>
+
+            <div class="column" id="col-doing">
+                <h3>🟡 En Proceso</h3>
+                <div id="list-doing" class="task-list"></div>
+            </div>
+
+            <div class="column" id="col-done">
+                <h3>🟢 Completado</h3>
+                <div id="list-done" class="task-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

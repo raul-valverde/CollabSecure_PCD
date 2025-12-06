@@ -1,0 +1,174 @@
+/* ==========================================
+   MINI TRELLO - LÓGICA DE LA APLICACIÓN
+   Autor: Equipo 5
+   Descripción: Gestión de tareas con validación y LocalStorage.
+   ========================================== */
+
+// ESTADO GLOBAL
+// Cargamos las tareas guardadas en el navegador o iniciamos un array vacío.
+// JSON.parse convierte el texto guardado de nuevo a un objeto JavaScript.
+let tasks = JSON.parse(localStorage.getItem('myTasks')) || [];
+
+/* -----------------------------------------------------
+   MÓDULO DE SEGURIDAD Y AUTENTICACIÓN
+   ----------------------------------------------------- */
+
+/**
+ * Función login()
+ * Valida credenciales y consentimiento ético.
+ */
+function login() {
+    // 1. Obtener valores del DOM (HTML)
+    const user = document.getElementById('username').value;
+    const pass = document.getElementById('password').value;
+    const privacyCheck = document.getElementById('privacy-policy').checked;
+    const errorMsg = document.getElementById('error-msg');
+
+    // 2. REQUISITO ÉTICO: Validar que aceptó la política
+    if (!privacyCheck) {
+        errorMsg.innerText = "⚠️ Error: Debe aceptar la política de privacidad para continuar.";
+        return; // Detiene la ejecución
+    }
+
+    // 3. REQUISITO DE SEGURIDAD: Validación de credenciales
+    // Nota: En un entorno real, esto se validaría contra una base de datos encriptada.
+    if (user === "admin" && pass === "1234") {
+        // Credenciales correctas: Ocultar login, mostrar app
+        document.getElementById('login-screen').classList.add('hidden');
+        document.getElementById('app-screen').classList.remove('hidden');
+        errorMsg.innerText = "";
+        
+        // Cargar las tareas existentes
+        renderTasks(); 
+    } else {
+        // Credenciales incorrectas
+        errorMsg.innerText = "❌ Usuario o contraseña incorrectos.";
+    }
+}
+
+/**
+ * Función logout()
+ * Cierra la sesión recargando la página.
+ */
+function logout() {
+    location.reload(); 
+}
+
+/* -----------------------------------------------------
+   MÓDULO DE GESTIÓN DE TAREAS (CRUD)
+   ----------------------------------------------------- */
+
+/**
+ * Función addTask()
+ * Crea una nueva tarea y la guarda.
+ */
+function addTask() {
+    const taskInput = document.getElementById('new-task');
+    const text = taskInput.value.trim(); // .trim() elimina espacios vacíos al inicio/final
+
+    // Validación básica: No permitir tareas vacías
+    if (text === '') {
+        alert("Por favor, escribe el nombre de la tarea.");
+        return;
+    }
+
+    // Objeto Tarea
+    const newTask = {
+        id: Date.now(), // Usamos la fecha como ID único
+        text: text,
+        status: 'todo'  // Estado inicial: 'todo' (Pendiente)
+    };
+
+    // Agregar al array y guardar
+    tasks.push(newTask);
+    saveAndRender();
+    
+    // Limpiar el campo de texto
+    taskInput.value = '';
+}
+
+/**
+ * Función moveTask(id, newStatus)
+ * Cambia el estado de una tarea (Mueve la tarjeta de columna).
+ */
+function moveTask(id, newStatus) {
+    // Buscar el índice de la tarea por su ID
+    const taskIndex = tasks.findIndex(task => task.id === id);
+    
+    if (taskIndex !== -1) {
+        tasks[taskIndex].status = newStatus; // Actualizar estado
+        saveAndRender(); // Guardar cambios
+    }
+}
+
+/**
+ * Función deleteTask(id)
+ * Elimina una tarea permanentemente.
+ */
+function deleteTask(id) {
+    if(confirm("¿Estás seguro de borrar esta tarea?")) {
+        // Filtrar el array para dejar fuera la tarea con ese ID
+        tasks = tasks.filter(task => task.id !== id);
+        saveAndRender();
+    }
+}
+
+/* -----------------------------------------------------
+   MÓDULO DE PERSISTENCIA Y RENDERIZADO
+   ----------------------------------------------------- */
+
+/**
+ * Función saveAndRender()
+ * Guarda en LocalStorage y redibuja la pantalla.
+ */
+function saveAndRender() {
+    // Guardar en el navegador (Persistencia de datos)
+    localStorage.setItem('myTasks', JSON.stringify(tasks));
+    renderTasks();
+}
+
+/**
+ * Función renderTasks()
+ * Convierte el array de tareas en elementos HTML visibles.
+ */
+function renderTasks() {
+    // 1. Limpiar las columnas antes de redibujar
+    document.getElementById('list-todo').innerHTML = '';
+    document.getElementById('list-doing').innerHTML = '';
+    document.getElementById('list-done').innerHTML = '';
+
+    // 2. Recorrer cada tarea y crear su tarjeta HTML
+    tasks.forEach(task => {
+        const card = document.createElement('div');
+        card.className = 'task-card';
+        
+        // Generar botones dinámicamente según el estado de la tarea
+        let actionButtons = '';
+        
+        if (task.status === 'todo') {
+            // Si está pendiente -> Botón para iniciar
+            actionButtons = `<button onclick="moveTask(${task.id}, 'doing')" style="background:#ffc107; color:black;">Iniciar ▶️</button>`;
+        } else if (task.status === 'doing') {
+            // Si está en proceso -> Botones para devolver o terminar
+            actionButtons = `
+                <button onclick="moveTask(${task.id}, 'todo')" style="background:#6c757d;">⏮️</button>
+                <button onclick="moveTask(${task.id}, 'done')" style="background:#28a745;">Terminar ✅</button>
+            `;
+        } else {
+            // Si está terminada -> Botón para borrar
+            actionButtons = `<button onclick="deleteTask(${task.id})" style="background:#dc3545;">Eliminar 🗑️</button>`;
+        }
+
+        // Insertar HTML dentro de la tarjeta
+        card.innerHTML = `
+            <p style="margin: 0 0 10px 0;">${task.text}</p>
+            <div style="display: flex; gap: 5px; justify-content: flex-end;">
+                ${actionButtons}
+            </div>
+        `;
+
+        // 3. Insertar la tarjeta en la columna correspondiente del DOM
+        const columnId = `list-${task.status}`;
+        document.getElementById(columnId).appendChild(card);
+    });
+}
