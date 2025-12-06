@@ -26,13 +26,28 @@
             <button onclick="login()" class="btn-primary">Ingresar</button>
             
             <p id="error-msg" class="error"></p>
+            
+            <hr>
+            <div class="register-form">
+                <h4>Registrar nueva cuenta</h4>
+                <input type="text" id="reg-username" placeholder="Nuevo usuario (ej: subadmin)">
+                <input type="password" id="reg-password" placeholder="Nueva contraseña (ej: 4321)">
+                <button onclick="registerUser()" class="btn-small">Registrar</button>
+                <p id="reg-msg" class="error" style="color:green"></p>
+            </div>
         </div>
     </div>
 
     <div id="app-screen" class="container hidden">
         <header>
-            <h1> Tablero de Equipo</h1>
-            <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
+            <h1> Tablero de Equipo <span id="current-user" class="current-user"></span></h1>
+            <div class="header-controls">
+                <button onclick="exportTasks()" class="btn-small">Exportar</button>
+                <button onclick="triggerImport()" class="btn-small">Importar</button>
+                <input id="import-file" type="file" accept="application/json" style="display:none" onchange="handleImport(event)">
+                <button onclick="clearAllTasks()" class="btn-small warn">Limpiar todo</button>
+                <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
+            </div>
         </header>
 
         <div class="input-group">
