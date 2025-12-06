@@ -7,6 +7,28 @@ const AUTH_USER = 'admin';
 const AUTH_PASS = '1234';
 const STORAGE_KEY = 'mini_trello_data_v3'; // Clave para guardar en el navegador (actualizada para nueva estructura)
 const USERS_KEY = 'mini_trello_users_v1'; // Usuarios registrados localmente
+let currentUser = null; // Usuario actualmente autenticado
+
+function defaultBoard() {
+    return { pendientes: [], enproceso: [], enrevision: [], hecho: [] };
+}
+
+function loadAllBoards(){
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return {};
+    try{
+        const parsed = JSON.parse(raw);
+        // Migración: si el archivo contiene directamente las columnas, envolverlo bajo 'admin'
+        if (parsed && (parsed.pendientes || parsed.enproceso || parsed.enrevision || parsed.hecho)){
+            return { admin: parsed };
+        }
+        return parsed || {};
+    } catch(e){ return {}; }
+}
+
+function saveAllBoards(all){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+}
 
 // Utilidad rápida para seleccionar elementos por ID
 function el(id) { return document.getElementById(id); }
@@ -49,6 +71,11 @@ function login() {
     const users = loadUsers();
     const found = users.find(x => x.username === u && x.password === p);
     if ((u === AUTH_USER && p === AUTH_PASS) || found) {
+        currentUser = u; // establecer usuario actual
+        // asegurar que exista un tablero para el usuario
+        const all = loadAllBoards();
+        if (!all[currentUser]) { all[currentUser] = defaultBoard(); saveAllBoards(all); }
+
         el('login-screen').classList.add('hidden');
         el('app-screen').classList.remove('hidden');
         initApp(); // Iniciar la app solo si el login es exitoso
@@ -107,6 +134,11 @@ function registerUser(){
 
     users.push({ username: u, password: p });
     saveUsers(users);
+    // crear tablero vacío para el nuevo usuario
+    const all = loadAllBoards();
+    all[u] = defaultBoard();
+    saveAllBoards(all);
+
     alert('Usuario registrado correctamente. Ahora puedes iniciar sesión.');
     // volver al login
     showLogin();
@@ -119,6 +151,7 @@ function logout() {
     el('password').value = '';
     el('username').value = '';
     el('error-msg').textContent = '';
+    currentUser = null;
 }
 
 
@@ -127,21 +160,17 @@ function logout() {
    ========================================== */
 
 function loadTasks() {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    // Si no hay datos, devolvemos la estructura vacía base (4 columnas)
-    if (!raw) return { pendientes: [], enproceso: [], enrevision: [], hecho: [] };
-    
-    try {
-        const parsed = JSON.parse(raw);
-        // Asegurar compatibilidad: cada tarea tiene comments array
-        ['pendientes','enproceso','enrevision','hecho'].forEach(col => {
-            if (!Array.isArray(parsed[col])) parsed[col] = [];
-            parsed[col].forEach(t => { if (!Array.isArray(t.comments)) t.comments = []; });
-        });
-        return parsed;
-    } catch (e) {
-        return { pendientes: [], enproceso: [], enrevision: [], hecho: [] };
-    }
+    // Cargar sólo el tablero del usuario actual (si existe)
+    if (!currentUser) return defaultBoard();
+    const all = loadAllBoards();
+    let board = all[currentUser];
+    if (!board) board = defaultBoard();
+    // Asegurar compatibilidad: cada tarea tiene comments array
+    ['pendientes','enproceso','enrevision','hecho'].forEach(col => {
+        if (!Array.isArray(board[col])) board[col] = [];
+        board[col].forEach(t => { if (!Array.isArray(t.comments)) t.comments = []; });
+    });
+    return board;
 }
 
 // Normalización y filtros de texto
@@ -189,7 +218,10 @@ function updateTaskDate(taskId, dateString){
 }
 
 function saveTasks(state) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    if (!currentUser) return;
+    const all = loadAllBoards();
+    all[currentUser] = state;
+    saveAllBoards(all);
 }
 
 
