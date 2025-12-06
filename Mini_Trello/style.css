@@ -1,245 +1,82 @@
-/* ==========================================
-   ESTILOS GENERALES
-   ========================================== */
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f2f5; /* Color suave para evitar fatiga visual */
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-    margin: 0;
+:root{
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --accent:#2b8cff;
+    --muted:#6b7280;
 }
 
-.container {
-    width: 100%;
-    max-width: 1000px;
-    background-color: transparent;
+*{box-sizing:border-box;font-family:Segoe UI, Roboto, Arial, sans-serif}
+
+body{
+    margin:0;
+    background:var(--bg);
+    color:#111827;
 }
 
-/* Clase de utilidad para ocultar pantallas (Login vs App) */
-.hidden {
-    display: none !important;
+header{
+    background:var(--accent);
+    color:white;
+    padding:18px 24px;
 }
 
-/* ==========================================
-   ESTILOS DEL LOGIN
-   ========================================== */
-#login-screen {
-    background: white;
-    max-width: 400px;
-    padding: 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    margin-top: 50px;
-    text-align: center;
+header h1{margin:0;font-size:1.2rem}
+
+.container{
+    display:flex;
+    gap:20px;
+    padding:24px;
+    align-items:flex-start;
+    flex-wrap:wrap;
 }
 
-.error {
-    color: #d9534f;
-    font-size: 0.9em;
-    margin-top: 15px;
-    font-weight: bold;
+.form-section{
+    background:var(--card);
+    padding:18px;
+    border-radius:8px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.06);
+    min-width:280px;
+    flex:1 1 320px;
 }
 
-.privacy-check {
-    margin: 15px 0;
-    font-size: 0.85em;
-    text-align: left;
+.form-section label{display:block;margin-top:8px;color:var(--muted);font-size:0.9rem}
+.form-section input[type="text"]{
+    width:100%;
+    padding:8px 10px;
+    margin-top:6px;
+    border:1px solid #d1d5db;
+    border-radius:6px;
 }
 
-.register-form h4 { margin: 8px 0 6px 0; font-size: 1rem }
-.register-form input { width: 90%; margin-bottom: 8px }
+.chk{display:flex;align-items:center;gap:8px;margin-top:10px;user-select:none}
 
-/* Inputs generales */
-input[type="text"], input[type="password"] {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+.buttons{display:flex;gap:10px;margin-top:12px}
+.buttons button{
+    padding:8px 12px;border-radius:6px;border:none;cursor:pointer;
+    background:var(--accent);color:white;font-weight:600;
+}
+.buttons button#despacharBtn{background:#10b981}
+
+.info{display:flex;flex-direction:column;gap:6px;margin-top:12px;font-size:0.95rem;color:var(--muted)}
+
+.lists-section{
+    display:flex;
+    gap:20px;
+    flex:1 1 420px;
+    align-items:flex-start;
 }
 
-/* ==========================================
-   ESTILOS DEL TABLERO (BOARD)
-   ========================================== */
-.board {
-    display: flex; /* Flexbox para poner columnas lado a lado */
-    gap: 20px;
-    justify-content: space-between;
-    margin-top: 20px;
+.list-card{
+    background:var(--card);
+    padding:12px;border-radius:8px;min-width:220px;
+    box-shadow:0 2px 6px rgba(0,0,0,0.04);
 }
 
-/* Estilo de las columnas */
-.column {
-    background: #ebecf0;
-    padding: 15px;
-    border-radius: 8px;
-    width: 32%; /* Divide el ancho en 3 partes iguales */
-    min-height: 400px;
+.list-card h2{margin:0 0 8px 0;font-size:1rem}
+.list{list-style:none;padding:0;margin:0;min-height:80px}
+.list li{
+    padding:8px 10px;border-radius:6px;margin-bottom:8px;
+    border:1px solid #e5e7eb;background:#fafafa;
+    display:flex;justify-content:space-between;align-items:center;
 }
 
-/* Tarjetas individuales de tareas */
-.task-card {
-    background: white;
-    padding: 15px;
-    margin-bottom: 10px;
-    border-radius: 5px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-/* Botones de acción */
-button {
-    cursor: pointer;
-    padding: 8px 15px;
-    border: none;
-    border-radius: 4px;
-    font-weight: bold;
-    transition: background 0.3s;
-}
-
-.btn-primary { background-color: #007bff; color: white; width: 100%; }
-.btn-add { background-color: #28a745; color: white; }
-.logout-btn { background-color: #dc3545; color: white; float: right; }
-
-/* ========= Mejora visual: limpieza y espaciado ========= */
-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    margin-bottom: 10px;
-}
-
-header h1 {
-    font-size: 1.2rem;
-    margin: 0;
-    color: #222;
-}
-
-.input-group {
-    display: flex;
-    gap: 10px;
-    align-items: center;
-    margin: 10px 0;
-}
-
-.input-group input[type="text"] {
-    flex: 1;
-    padding: 10px 12px;
-    border-radius: 8px;
-    border: 1px solid #d1d5db;
-    background: white;
-}
-
-.btn-add {
-    padding: 10px 14px;
-    border-radius: 8px;
-}
-
-.task-list {
-    min-height: 60px;
-}
-
-.task-card { /* ligero refinamiento */
-    padding: 12px;
-    border-radius: 8px;
-    background: #fff;
-    box-shadow: 0 1px 4px rgba(16,24,40,0.06);
-}
-
-.task-content {
-    color: #111827;
-    font-size: 0.95rem;
-}
-
-.task-actions {
-    display: flex;
-    justify-content: flex-end;
-    margin-top: 8px;
-}
-
-.btn-delete {
-    background: transparent;
-    color: #ef4444;
-    padding: 6px 10px;
-    border-radius: 6px;
-    border: 1px solid transparent;
-}
-
-.action-btn {
-    background: transparent;
-    color: #374151;
-    padding: 6px 8px;
-    border-radius: 6px;
-    border: 1px solid rgba(55,65,81,0.06);
-    margin-left: 6px;
-    font-weight: 600;
-}
-
-.action-btn.small { padding: 4px 6px; font-size: 0.9rem }
-
-.btn-small {
-    background: #f3f4f6;
-    border: 1px solid #e5e7eb;
-    color: #111827;
-    padding: 6px 10px;
-    border-radius: 8px;
-    margin-right: 8px;
-}
-
-.btn-small.warn { background: linear-gradient(90deg,#f97316,#f43f5e); color: white; border: none }
-
-.header-controls { display:flex; align-items:center; gap:6px }
-
-.current-user {
-    font-size: 0.9rem;
-    color: #374151;
-    margin-left: 10px;
-    font-weight: 600;
-}
-
-/* Responsivo: apilar columnas en pantallas pequeñas */
-@media (max-width: 800px) {
-    .board { flex-direction: column; }
-    .column { width: 100%; }
-}
-
-/* ========== Toast (mensaje breve) ========== */
-.toast-container {
-    position: fixed;
-    left: 50%;
-    bottom: 24px;
-    transform: translateX(-50%);
-    z-index: 1200;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    pointer-events: none; /* clicks pasan a elementos debajo excepto en el toast */
-}
-
-.toast {
-    pointer-events: auto;
-    min-width: 160px;
-    max-width: 320px;
-    background: rgba(17,24,39,0.95);
-    color: #fff;
-    padding: 10px 14px;
-    border-radius: 10px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
-    font-size: 0.95rem;
-    opacity: 0;
-    transform: translateY(8px);
-    transition: opacity 220ms ease, transform 220ms ease;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.toast.success { background: linear-gradient(90deg,#16a34a,#059669); }
-.toast.warn { background: linear-gradient(90deg,#f97316,#f43f5e); }
-
+footer{padding:12px 24px;color:var(--muted);font-size:0.85rem}

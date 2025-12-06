@@ -1,78 +1,53 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mini Trello - Proyecto Colaborativo</title>
-    <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mini Trello - Envíos</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+    <header>
+        <h1>Mini Trello - Gestión de Pedidos</h1>
+    </header>
 
-    <div id="login-screen" class="container">
-        <h2> Acceso Seguro al Sistema</h2>
-        <p class="subtitle">Ingrese las credenciales para gestionar su tablero.</p>
-        
-        <div class="login-form">
-            <input type="text" id="username" placeholder="Usuario (admin)">
-            <input type="password" id="password" placeholder="Contraseña (1234)">
-            
-            <div class="privacy-check">
-                <input type="checkbox" id="privacy-policy">
-                <label for="privacy-policy">
-                    He leído y acepto la <a href="#" onclick="alert('Política: Sus datos se guardan localmente y no se comparten con terceros.')">Política de Privacidad</a> y uso ético de datos.
-                </label>
+    <main class="container">
+        <section class="form-section">
+            <label for="pedidoInput">Número de pedido</label>
+            <input id="pedidoInput" type="text" placeholder="Ej: 12345" />
+
+            <label class="chk">
+                <input id="prioritarioChk" type="checkbox" />
+                Registrar como PRIORITARIO
+            </label>
+
+            <div class="buttons">
+                <button id="agregarBtn">Agregar</button>
+                <button id="despacharBtn">Despachar</button>
             </div>
 
-            <button onclick="login()" class="btn-primary">Ingresar</button>
-            
-            <p id="error-msg" class="error"></p>
-            
-            <hr>
-            <div class="register-form">
-                <h4>Registrar nueva cuenta</h4>
-                <input type="text" id="reg-username" placeholder="Nuevo usuario (ej: subadmin)">
-                <input type="password" id="reg-password" placeholder="Nueva contraseña (ej: 4321)">
-                <button onclick="registerUser()" class="btn-small">Registrar</button>
-                <p id="reg-msg" class="error" style="color:green"></p>
+            <div class="info">
+                <span>Siguiente en salir (prioritario): <strong id="siguientePrioritario">—</strong></span>
+                <span>Siguiente en salir (regular): <strong id="siguienteRegular">—</strong></span>
             </div>
-        </div>
-    </div>
+        </section>
 
-    <div id="app-screen" class="container hidden">
-        <header>
-            <h1> Tablero de Equipo <span id="current-user" class="current-user"></span></h1>
-            <div class="header-controls">
-                <button onclick="exportTasks()" class="btn-small">Exportar</button>
-                <button onclick="triggerImport()" class="btn-small">Importar</button>
-                <input id="import-file" type="file" accept="application/json" style="display:none" onchange="handleImport(event)">
-                <button onclick="clearAllTasks()" class="btn-small warn">Limpiar todo</button>
-                <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
-            </div>
-        </header>
-
-        <div class="input-group">
-            <input type="text" id="new-task" placeholder="Ej: Redactar informe final...">
-            <button onclick="addTask()" class="btn-add">Agregar Tarea (+)</button>
-        </div>
-
-        <div class="board">
-            <div class="column" id="col-todo">
-                <h3>🔴 Por Hacer</h3>
-                <div id="list-todo" class="task-list">
-                    </div>
+        <section class="lists-section">
+            <div class="list-card">
+                <h2>Prioritarios (Pila)</h2>
+                <ul id="listaPrioritario" class="list"></ul>
             </div>
 
-            <div class="column" id="col-doing">
-                <h3>🟡 En Proceso</h3>
-                <div id="list-doing" class="task-list"></div>
+            <div class="list-card">
+                <h2>Regulares (Cola)</h2>
+                <ul id="listaRegular" class="list"></ul>
             </div>
+        </section>
+    </main>
 
-            <div class="column" id="col-done">
-                <h3>🟢 Completado</h3>
-                <div id="list-done" class="task-list"></div>
-            </div>
-        </div>
-    </div>
+    <footer>
+        <small>Mini_Trello — integrando pila y cola</small>
+    </footer>
 
     <script src="app.js"></script>
 </body>
