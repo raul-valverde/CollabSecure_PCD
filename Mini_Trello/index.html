@@ -1,54 +1,38 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Mini Trello - Envíos</title>
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini Trello - Proyecto Colaborativo</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>Mini Trello - Gestión de Pedidos</h1>
-    </header>
 
-    <main class="container">
-        <section class="form-section">
-            <label for="pedidoInput">Número de pedido</label>
-            <input id="pedidoInput" type="text" placeholder="Ej: 12345" />
+    <div id="login-screen" class="container">
+        <h2> Acceso Seguro al Sistema</h2>
+        <p class="subtitle">Ingrese sus credenciales para gestionar el tablero.</p>
 
-            <label class="chk">
-                <input id="prioritarioChk" type="checkbox" />
-                Registrar como PRIORITARIO
-            </label>
+        <div class="login-form">
+            <input type="text" id="username" placeholder="Usuario (admin)">
+            <input type="password" id="password" placeholder="Contraseña (1234)">
 
-            <div class="buttons">
-                <button id="agregarBtn">Agregar</button>
-                <button id="despacharBtn">Despachar</button>
+            <div class="privacy-check">
+                <input type="checkbox" id="privacy-policy">
+                <label for="privacy-policy">
+                    He leído y acepto la <a href="#" onclick="alert('Política: Sus datos se guardan localmente y no se comparten con terceros.')">Política de Privacidad</a> y uso ético de datos.
+                </label>
             </div>
 
-            <div class="info">
-                <span>Siguiente en salir (prioritario): <strong id="siguientePrioritario">—</strong></span>
-                <span>Siguiente en salir (regular): <strong id="siguienteRegular">—</strong></span>
+            <button onclick="login()" class="btn-primary">Ingresar</button>
+
+            <p id="error-msg" class="error"></p>
+        </div>
+    </div>
+
+    <div id="app-screen" class="container hidden">
+        <header class="header-bar">
+            <h1> Tablero de Equipo</h1>
+            <div style="display:flex;gap:10px;align-items:center;">
+                <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
             </div>
-        </section>
-
-        <section class="lists-section">
-            <div class="list-card">
-                <h2>Prioritarios (Pila)</h2>
-                <ul id="listaPrioritario" class="list"></ul>
-            </div>
-
-            <div class="list-card">
-                <h2>Regulares (Cola)</h2>
-                <ul id="listaRegular" class="list"></ul>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <small>Mini_Trello — integrando pila y cola</small>
-    </footer>
-
-    <script src="app.js"></script>
-</body>
-</html>
+        </header>
