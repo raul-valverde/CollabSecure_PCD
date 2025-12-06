@@ -6,6 +6,7 @@
 const AUTH_USER = 'admin';
 const AUTH_PASS = '1234';
 const STORAGE_KEY = 'mini_trello_data_v3'; // Clave para guardar en el navegador (actualizada para nueva estructura)
+const USERS_KEY = 'mini_trello_users_v1'; // Usuarios registrados localmente
 
 // Utilidad rápida para seleccionar elementos por ID
 function el(id) { return document.getElementById(id); }
@@ -44,13 +45,71 @@ function login() {
     }
 
     // Validación de Credenciales
-    if (u === AUTH_USER && p === AUTH_PASS) {
+    // Verificar credenciales contra usuario por defecto o usuarios registrados
+    const users = loadUsers();
+    const found = users.find(x => x.username === u && x.password === p);
+    if ((u === AUTH_USER && p === AUTH_PASS) || found) {
         el('login-screen').classList.add('hidden');
         el('app-screen').classList.remove('hidden');
         initApp(); // Iniciar la app solo si el login es exitoso
     } else {
         err.textContent = '❌ Credenciales incorrectas.';
     }
+}
+
+function showRegister(){
+    el('register-form').classList.remove('hidden');
+    // hide login inputs
+    const loginForm = el('login-screen').querySelector('.login-form');
+    if (loginForm) loginForm.classList.add('hidden');
+}
+
+function showLogin(){
+    const registerForm = el('register-form');
+    if (registerForm) registerForm.classList.add('hidden');
+    const loginForm = el('login-screen').querySelector('.login-form');
+    if (loginForm) loginForm.classList.remove('hidden');
+}
+
+function loadUsers(){
+    const raw = localStorage.getItem(USERS_KEY);
+    if (!raw) return [];
+    try { return JSON.parse(raw); } catch(e){ return []; }
+}
+
+function saveUsers(list){
+    localStorage.setItem(USERS_KEY, JSON.stringify(list));
+}
+
+function registerUser(){
+    const u = el('register-username').value.trim();
+    const p = el('register-password').value;
+    const pc = el('register-password-confirm').value;
+    const ok = el('register-privacy-policy').checked;
+    const msg = el('register-msg');
+    msg.textContent = '';
+
+    if (!ok) { msg.textContent = 'Debe aceptar la política de privacidad.'; return; }
+    if (!u || !p) { msg.textContent = 'Completa usuario y contraseña.'; return; }
+    if (p !== pc) { msg.textContent = 'Las contraseñas no coinciden.'; return; }
+    if (p.length < 4) { msg.textContent = 'La contraseña debe tener al menos 4 caracteres.'; return; }
+
+    // Validar formalidad del username
+    const check = validateFormalText(u);
+    if (!check.ok) {
+        if (check.reason === 'forbidden') { msg.textContent = 'Usuario contiene palabras no permitidas.'; return; }
+        if (check.reason === 'informal') { msg.textContent = 'Por favor usa un nombre de usuario formal.'; return; }
+        msg.textContent = 'Usuario inválido.'; return;
+    }
+
+    const users = loadUsers();
+    if (users.find(x => x.username === u) || (u === AUTH_USER)) { msg.textContent = 'El usuario ya existe.'; return; }
+
+    users.push({ username: u, password: p });
+    saveUsers(users);
+    alert('Usuario registrado correctamente. Ahora puedes iniciar sesión.');
+    // volver al login
+    showLogin();
 }
 
 function logout() {
