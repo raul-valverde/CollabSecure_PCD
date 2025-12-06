@@ -30,14 +30,21 @@
     </div>
 
     <div id="app-screen" class="container hidden">
-        <header>
+        <header class="header-bar">
             <h1> Tablero de Equipo</h1>
-            <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
+            <div style="display:flex;gap:10px;align-items:center;">
+                <button onclick="logout()" class="logout-btn">Cerrar Sesión</button>
+            </div>
         </header>
 
         <div class="input-group">
             <input type="text" id="new-task" placeholder="Ej: Redactar informe final...">
-            <button onclick="addTask()" class="btn-add">Agregar Tarea (+)</button>
+            <button onclick="addTask()" class="btn-add" aria-label="Agregar tarea">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right:6px;vertical-align:middle;">
+                    <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                Agregar Tarea
+            </button>
         </div>
 
         <div class="board">
