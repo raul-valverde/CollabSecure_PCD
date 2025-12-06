@@ -78,6 +78,7 @@ function login() {
 
         el('login-screen').classList.add('hidden');
         el('app-screen').classList.remove('hidden');
+        const userEl = el('current-user'); if (userEl) userEl.textContent = currentUser;
         initApp(); // Iniciar la app solo si el login es exitoso
     } else {
         err.textContent = '❌ Credenciales incorrectas.';
@@ -152,6 +153,7 @@ function logout() {
     el('username').value = '';
     el('error-msg').textContent = '';
     currentUser = null;
+    const userEl = el('current-user'); if (userEl) userEl.textContent = '';
 }
 
 
